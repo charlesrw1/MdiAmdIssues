@@ -1,0 +1,39 @@
+
+layout (location = 0) in vec3 VS_IN_Postion;
+
+
+out vec3 FS_IN_ColorHash;
+
+
+vec3 randColor(int number){
+    return fract(sin(vec3(number+1)*vec3(12.8787, 1.97, 20.73739)));
+}
+
+
+uniform mat4 viewproj = mat4(1.0);
+
+#ifdef NAIVE
+uniform mat4 model;
+uniform int integer;
+#endif // NAIVE
+
+#ifdef MDI
+layout (binding = 2, std140) readonly buffer matricies_obj {
+	mat4 matricies[];
+};
+#endif	// MDI
+
+
+void main()
+{
+#ifdef NAIVE
+	FS_IN_ColorHash = randColor(integer);
+	vec4 local_pos = model*vec4(VS_IN_Postion,1.0);
+#endif	// NAIVE	
+
+#ifdef MDI
+	FS_IN_ColorHash = randColor(gl_DrawID*145 - 5);
+	vec4 local_pos = matricies[gl_DrawID]*vec4(VS_IN_Postion,1.0);
+#endif	// MDI
+    gl_Position = viewproj * vec4(local_pos.xyz, 1.0);
+}

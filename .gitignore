@@ -1,0 +1,16 @@
+.vs/
+x64/
+Debug/
+Release/
+imgui.ini
+*.dll
+
+
+*.obj
+*.pdb
+*.lib
+*.tlog
+*.exe
+
+*.md
+*.dat
